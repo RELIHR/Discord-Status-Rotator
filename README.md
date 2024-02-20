@@ -11,7 +11,7 @@ Requirements
 Clone this repository:
 
 ```bash
-git clone https://github.com/RELIHR/
+git clone https://github.com/RELIHR/Discord-Status-Changer.git
 ```
 
 You can install the necessary packages by running the following command:
