@@ -1,0 +1,6 @@
+{
+  "token": "discord_token",
+  "clear_enabled": true,
+  "clear_interval": 15,
+  "sleep_interval": 3
+}
