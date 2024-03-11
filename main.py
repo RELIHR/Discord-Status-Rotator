@@ -23,19 +23,16 @@ def change_status(token, message):
     'authorization': token
   }
 
-  # Get current status information (including custom_status and activities)
   current_status = requests.get("https://discord.com/api/v8/users/@me/settings", headers=header).json()
 
-  # Preserve existing custom_status (text and emoji) and activities if present
   custom_status = current_status.get("custom_status", {})
   activities = current_status.get("activities", [])
 
-  # Update only the message part of the custom_status
   custom_status["text"] = message
 
   jsonData = {
     "custom_status": custom_status,
-    "activities": activities  # Keep existing activities
+    "activities": activities 
   }
 
   r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
