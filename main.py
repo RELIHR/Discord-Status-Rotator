@@ -72,7 +72,7 @@ while True:
         token_masked = token[:10] + "*****"
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
-        status_colored = color_text(status, "36") # Color Azul cyan
+        status_colored = color_text(status, "36") # Color Azul Cyan
         print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m")
         change_status(token, status)
         status_count += 1
