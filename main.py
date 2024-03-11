@@ -19,21 +19,33 @@ def get_user_info(token):
         return "Token inválido", False
 
 def change_status(token, message):
-    header ={
-        'authorization': token
-    }
-    
-    jsonData = {
-        "status": "online", # online, idle, invisible, dnd
-        "custom_status": {
-            "text": message,
-        } 
-    }
-    r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
-    return r.status_code
+  header = {
+    'authorization': token
+  }
+
+  # Get current status information (including custom_status and activities)
+  current_status = requests.get("https://discord.com/api/v8/users/@me/settings", headers=header).json()
+
+  # Preserve existing custom_status (text and emoji) and activities if present
+  custom_status = current_status.get("custom_status", {})
+  activities = current_status.get("activities", [])
+
+  # Update only the message part of the custom_status
+  custom_status["text"] = message
+
+  jsonData = {
+    "custom_status": custom_status,
+    "activities": activities  # Keep existing activities
+  }
+
+  r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
+  return r.status_code
+
+def read_statuses(file_name):
+  with open(file_name, "r") as file:
+    return [line.strip() for line in file.readlines()]
 
 def clear_console():
-
     os.system('cls' if os.name=='nt' else 'clear')
 
 def load_config():
@@ -55,15 +67,15 @@ while True:
     user_info, is_valid_token = get_user_info(token)
     statuses = read_statuses("text.txt")
     for status in statuses:
-        time_formatted = color_text(time.strftime("%I:%M %p:"), "35")  # Color Violeta
+        time_formatted = color_text(time.strftime("%I:%M %p:"), "35") # Color Violeta
         if is_valid_token:
-            token_color_code = "32"  # Color Verde
+            token_color_code = "32" # Color Verde
         else:
-            token_color_code = "31"  # color Rojo
+            token_color_code = "31" # color Rojo
         token_masked = token[:10] + "*****"
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
-        status_colored = color_text(status, "36")  # Color Azul cyan
+        status_colored = color_text(status, "36") # Color Azul cyan
         print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m")
         change_status(token, status)
         status_count += 1
