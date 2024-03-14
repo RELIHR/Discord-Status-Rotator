@@ -19,24 +19,24 @@ def get_user_info(token):
         return "Token inválido", False
 
 def change_status(token, message):
-  header = {
-    'authorization': token
-  }
+    header = {
+        'authorization': token
+    }
 
-  current_status = requests.get("https://discord.com/api/v8/users/@me/settings", headers=header).json()
+    current_status = requests.get("https://discord.com/api/v8/users/@me/settings", headers=header).json()
 
-  custom_status = current_status.get("custom_status", {})
-  activities = current_status.get("activities", [])
+    custom_status = current_status.get("custom_status", {})
+    if custom_status is None:
+        custom_status = {}
+    custom_status["text"] = message
 
-  custom_status["text"] = message
+    jsonData = {
+        "custom_status": custom_status,
+        "activities": current_status.get("activities", [])
+    }
 
-  jsonData = {
-    "custom_status": custom_status,
-    "activities": activities 
-  }
-
-  r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
-  return r.status_code
+    r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
+    return r.status_code
 
 def read_statuses(file_name):
   with open(file_name, "r") as file:
