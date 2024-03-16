@@ -11,7 +11,7 @@ def get_user_info(token):
     header ={
         'authorization': token
     }
-    r = requests.get("https://discord.com/api/v9/users/@me", headers=header)
+    r = requests.get("https://discord.com/api/v10/users/@me", headers=header)
     if r.status_code == 200:
         user_info = r.json()
         return user_info["username"] + "#" + user_info["discriminator"], True
@@ -88,7 +88,7 @@ while True:
         else:
             print(f"Emoji inválido: {emojis[emoji_count % len(emojis)]}")
             continue
-        print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m")
+        print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m. | Emoji: {emoji_name}")
         change_status(token, status, emoji_name, emoji_id)
         status_count += 1
         emoji_count += 1
