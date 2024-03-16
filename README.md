@@ -59,6 +59,6 @@ python main.py
 If you find any bugs or have any suggestions for improvement, feel free to open an issue or submit a pull request!
 
 
-## License
+### License
 
 This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license.
