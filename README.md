@@ -40,6 +40,12 @@ Be sure to replace ``token_discord`` with your own Discord token.
 
 Create a `text.txt` file containing the states you want to set in Discord, one per line.
 
+Create an `emojis.txt` file if you want to add rotating emojis, including nitro emojis.
+
+Nitro format: `name:id`
+
+Format without nitro (only the emoji): 😀
+
 Execute the script with Python:
 
 ```bash
@@ -54,6 +60,10 @@ python main.py
 
 - clear_interval: Number of state changes after which the console will be cleared.
 - sleep_interval: Time interval between each state change (in seconds).
+
+### Changelogs
+
+▶️ - Now you can rotate emojis (including nitro emojis)
 
 ### Contribution
 If you find any bugs or have any suggestions for improvement, feel free to open an issue or submit a pull request!
