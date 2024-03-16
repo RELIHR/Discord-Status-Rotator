@@ -38,15 +38,15 @@ Create a `config.json` file with the following structure (if you don't have it):
 
 Be sure to replace ``token_discord`` with your own Discord token.
 
-Create a `text.txt` file containing the states you want to set in Discord, one per line.
+- Create a `text.txt` file containing the states you want to set in Discord, one per line.
 
-Create an `emojis.txt` file if you want to add rotating emojis, including nitro emojis.
+- Create an `emojis.txt` file if you want to add rotating emojis, including nitro emojis.
 
 Nitro format: `name:id`
 
 Format without nitro (only the emoji): 😀
 
-Execute the script with Python:
+- Execute the script with Python:
 
 ```bash
 python main.py
