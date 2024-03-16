@@ -18,7 +18,7 @@ def get_user_info(token):
     else:
         return "Token inválido", False
 
-def change_status(token, message):
+def change_status(token, message, emoji_name, emoji_id):
     header = {
         'authorization': token
     }
@@ -29,6 +29,9 @@ def change_status(token, message):
     if custom_status is None:
         custom_status = {}
     custom_status["text"] = message
+    custom_status["emoji_name"] = emoji_name
+    if emoji_id:  
+        custom_status["emoji_id"] = emoji_id
 
     jsonData = {
         "custom_status": custom_status,
@@ -58,11 +61,13 @@ clear_enabled = config["clear_enabled"]
 clear_interval = config["clear_interval"]
 sleep_interval = config["sleep_interval"]
 
-status_count = 0
+status_count = 0  
+emoji_count = 0
 
 while True:
     user_info, is_valid_token = get_user_info(token)
     statuses = read_statuses("text.txt")
+    emojis = read_statuses("emojis.txt")
     for status in statuses:
         time_formatted = color_text(time.strftime("%I:%M %p:"), "35") # Color Violeta
         if is_valid_token:
@@ -73,9 +78,20 @@ while True:
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
         status_colored = color_text(status, "36") # Color Azul Cyan
+
+        emoji_data = emojis[emoji_count % len(emojis)].split(":")  
+        if len(emoji_data) == 2:
+            emoji_name, emoji_id = emoji_data
+        elif len(emoji_data) == 1:
+            emoji_name = emoji_data[0]
+            emoji_id = None
+        else:
+            print(f"Emoji inválido: {emojis[emoji_count % len(emojis)]}")
+            continue
         print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m")
-        change_status(token, status)
+        change_status(token, status, emoji_name, emoji_id)
         status_count += 1
+        emoji_count += 1
         time.sleep(sleep_interval)
         if clear_enabled and status_count % clear_interval == 0:
             clear_console()
