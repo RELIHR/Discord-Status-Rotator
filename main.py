@@ -2,10 +2,12 @@ import requests
 import time
 import json
 import os
+from colorama import init, Fore
 
 def read_statuses(file_name):
     with open(file_name, "r", encoding="utf-8") as file:
         return [line.strip() for line in file.readlines()]
+
 def get_user_info(token):
     header ={
         'authorization': token
@@ -15,7 +17,7 @@ def get_user_info(token):
         user_info = r.json()
         return user_info["username"] + "#" + user_info["discriminator"], True
     else:
-        return "Token inválido", False
+        return "Invalid token", False
 
 def change_status(token, message, emoji_name, emoji_id):
     header = {
@@ -40,10 +42,6 @@ def change_status(token, message, emoji_name, emoji_id):
     r = requests.patch("https://discord.com/api/v8/users/@me/settings", headers=header, json=jsonData)
     return r.status_code
 
-def read_statuses(file_name):
-  with open(file_name, "r", encoding="utf-8") as file:
-    return [line.strip() for line in file.readlines()]
-
 def clear_console():
     os.system('cls' if os.name=='nt' else 'clear')
 
@@ -52,7 +50,9 @@ def load_config():
         return json.load(file)
 
 def color_text(text, color_code):
-    return f"\033[{color_code}m{text}\033[0m"
+    return f"{color_code}{text}{Fore.RESET}"
+
+init()  
 
 config = load_config()
 token = config["token"]
@@ -68,15 +68,15 @@ while True:
     statuses = read_statuses("text.txt")
     emojis = read_statuses("emojis.txt")
     for status in statuses:
-        time_formatted = color_text(time.strftime("%I:%M %p:"), "35") # Color Violeta
+        time_formatted = color_text(time.strftime("%I:%M %p:"), Fore.MAGENTA)  # Violet color
         if is_valid_token:
-            token_color_code = "32" # Color Verde
+            token_color_code = Fore.GREEN  # Green color
         else:
-            token_color_code = "31" # color Rojo
+            token_color_code = Fore.RED  # Red color
         token_masked = token[:10] + "*****"
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
-        status_colored = color_text(status, "36") # Color Azul Cyan
+        status_colored = color_text(status, Fore.CYAN)  # Cyan color
 
         emoji_data = emojis[emoji_count % len(emojis)].split(":")  
         if len(emoji_data) == 2:
@@ -85,9 +85,9 @@ while True:
             emoji_name = emoji_data[0]
             emoji_id = None
         else:
-            print(f"Emoji inválido: {emojis[emoji_count % len(emojis)]}")
+            print(f"Invalid emoji: {emojis[emoji_count % len(emojis)]}")
             continue
-        print(f"{time_formatted} Estado cambiado para: \033[34m{token_colored}\033[0m. Nuevo status: \033[34m{status_colored}\033[0m. | Emoji: {emoji_name}")
+        print(f"{time_formatted} Status changed for: {token_colored}. New status: {status_colored}. | Emoji: {emoji_name}")
         change_status(token, status, emoji_name, emoji_id)
         status_count += 1
         emoji_count += 1
