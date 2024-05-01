@@ -4,9 +4,8 @@ import json
 import os
 
 def read_statuses(file_name):
-    with open(file_name, "r", encoding='utf-8') as file:
+    with open(file_name, "r", encoding="utf-8") as file:
         return [line.strip() for line in file.readlines()]
-
 def get_user_info(token):
     header ={
         'authorization': token
@@ -42,7 +41,7 @@ def change_status(token, message, emoji_name, emoji_id):
     return r.status_code
 
 def read_statuses(file_name):
-  with open(file_name, "r") as file:
+  with open(file_name, "r", encoding="utf-8") as file:
     return [line.strip() for line in file.readlines()]
 
 def clear_console():
