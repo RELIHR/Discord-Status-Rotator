@@ -76,7 +76,7 @@ while True:
         token_masked = token[:10] + "*****"
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
-        status_colored = color_text(status, Fore.CYAN)
+        status_colored = color_text(status, Fore.CYAN) 
 
         emoji_data = emojis[emoji_count % len(emojis)].split(":")  
         if len(emoji_data) == 2:
