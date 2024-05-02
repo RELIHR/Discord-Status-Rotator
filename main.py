@@ -68,15 +68,15 @@ while True:
     statuses = read_statuses("text.txt")
     emojis = read_statuses("emojis.txt")
     for status in statuses:
-        time_formatted = color_text(time.strftime("%I:%M %p:"), Fore.MAGENTA)  # Violet color
+        time_formatted = color_text(time.strftime("%I:%M %p:"), Fore.MAGENTA)
         if is_valid_token:
-            token_color_code = Fore.GREEN  # Green color
+            token_color_code = Fore.GREEN
         else:
-            token_color_code = Fore.RED  # Red color
+            token_color_code = Fore.RED
         token_masked = token[:10] + "*****"
         token_info = f"{token_masked} | {user_info}"
         token_colored = color_text(token_info, token_color_code)
-        status_colored = color_text(status, Fore.CYAN)  # Cyan color
+        status_colored = color_text(status, Fore.CYAN)
 
         emoji_data = emojis[emoji_count % len(emojis)].split(":")  
         if len(emoji_data) == 2:
