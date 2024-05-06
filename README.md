@@ -51,21 +51,22 @@ Format without nitro (only the emoji): `😀`
 ### ⚙️ Configuration
 
 - token: Your Discord token account.
-
+- status_sequence: Rotate the status (online, dnd, idle, offline). You can have one fixed by removing the others and leaving only the one you want.
 - clear_enabled: Enables or disables console clearing after a certain number of status changes.
-
 - clear_interval: Number of state changes after which the console will be cleared.
-- sleep_interval: Time interval between each state change (in seconds).
+- speed_rotator: Time interval between each state change (in seconds).
 
 ---------------------------------------
 
 ### 📃 Changelogs
 
 ```
+(06/04/24)
+↗️ - You can now rotate the status (🟢online, ⛔dnd, 🟠idle, 🌑offline). | [Feature]
 (01/04/24)
-✅ - Fixed encoding (UTF-8)  [Error]
+✅ - Fixed encoding (UTF-8). | [Error]
 (12/03/24)
-↗️ - Now you can rotate emojis (including nitro emojis)  [Feature]
+↗️ - Now you can rotate emojis (including nitro emojis). | [Feature]
 ```
 
 ---------------------------------------
