@@ -1,0 +1,33 @@
+{
+  "_comment_token": "YoUr Discord token - Check README.md for more info",
+  "token": "",
+  
+  "_comment_status": "Discord status rotation: online, idle, dnd, offline",
+  "status_sequence": ["online", "idle", "dnd"],
+  "use_status_sequence": false,
+  
+  "_comment_console": "Console clearing settings",
+  "clear_enabled": true,
+  "clear_interval": 1,
+  "_comment_clear_interval": "Number of status updates before clearing console (not seconds)",
+  
+  "_comment_timing": "Time between status changes in seconds",
+  "speed_rotator": 15,
+  
+  "_comment_emoji": "Emoji rotation mode: 'with_text' or 'after_text_cycle'",
+  "emoji_rotation_mode": "with_text",
+  
+  "_comment_hypesquad": "HypeSquad badge rotation settings",
+  "hypesquad_sequence": ["bravery", "brilliance", "balance"],
+  "hypesquad_mapping": {
+    "bravery": 1,
+    "brilliance": 2,
+    "balance": 3
+  },
+  "rotate_hypesquad": false,
+  "hypesquad_rotation_interval": 60,
+
+  "_comment_bio": "About Me / Bio rotation sttings",
+  "rotate_aboutme": false,
+  "aboutme_rotation_interval": 60
+}
