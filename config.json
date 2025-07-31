@@ -2,9 +2,10 @@
   "token": "",
   "status_sequence": ["online", "idle", "dnd"],
   "clear_enabled": true,
-  "clear_interval": 15,
+  "clear_interval": 1,
   "speed_rotator": 15,
-  "use_status_sequence": false,
+  "use_status_sequence": true,
+  "emoji_rotation_mode": "after_text_cycle",
   "hypesquad_sequence": ["bravery", "brilliance", "balance"],
   "hypesquad_mapping": {
     "bravery": 1,
