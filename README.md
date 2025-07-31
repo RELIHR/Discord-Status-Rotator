@@ -59,15 +59,21 @@ Format without nitro (only the emoji): `😀`
 
 ### ⚙️ Configuration
 
-- token: Your Discord token account.
-- status_sequence: Rotate the status (online, dnd, idle, offline). You can have one fixed by removing the others and leaving only the one you want.
-- clear_enabled: Enables or disables console clearing after a certain number of status changes.
-- clear_interval: Number of state changes after which the console will be cleared.
-- speed_rotator: Time interval between each state change (in seconds).
-- rotate_hypesquad: Enables or disables HypeSquad rotation.
-- hypesquad_rotation_interval: Time interval between each HypeSquad change (in seconds).
-- rotate_aboutme: Enables or disables About Me rotation.
-- aboutme_rotation_interval: Time interval between each About Me change (in seconds).
+- **token**: Your Discord token account.
+- **status_sequence**: Rotate the status (online, dnd, idle, offline). You can have one fixed by removing the others and leaving only the one you want.
+- **use_status_sequence**: Enable or disable the status sequence rotation.
+- **clear_enabled**: Enables or disables automatic console clearing.
+- **clear_interval**: Number of status updates after which the console will be automatically cleared (e.g., 15 means clear console every 15 status changes).
+- **speed_rotator**: Time interval between each state change (in seconds).
+- **emoji_rotation_mode**: Controls when emojis change. Options are:
+  - `"with_text"`: Emojis change with each text change (default behavior).
+  - `"after_text_cycle"`: Emojis only change after all texts have been displayed once.
+- **rotate_hypesquad**: Enables or disables HypeSquad rotation.
+- **hypesquad_rotation_interval**: Time interval between each HypeSquad change (in seconds).
+- **hypesquad_sequence**: Array of HypeSquad houses to rotate between.
+- **hypesquad_mapping**: Maps HypeSquad house names to their IDs.
+- **rotate_aboutme**: Enables or disables About Me rotation.
+- **aboutme_rotation_interval**: Time interval between each About Me change (in seconds).
 
 ---------------------------------------
 
@@ -118,6 +124,12 @@ Format without nitro (only the emoji): `😀`
 ### 📃 Change History
 
 ```
+(31/07/25)
+  ↗️ - Added emoji rotation control: emojis can now be set to change only after completing
+  a full text cycle instead of with each text change. | [FeAture]
+  ↗️ - Added startup configuration display showing current settings overview. | [Feature]
+  ↗️ - Improved message formatting with emojis, separators, and visual progress indicators. | [UI Terminal Enhancement]
+  ↗️ - Clarified console clearing behavior: clear_interval now counts status updates, not time. | [Documentation]
 (26/12/24)
   ↗️ - Added "HypeSquad" rotation feature. | [Feature]
   ↗️ - Added "About Me" rotation feature. (Test) | [Feature]
