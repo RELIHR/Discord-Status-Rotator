@@ -59,6 +59,74 @@ def load_config():
 def color_text(text, color_code):
     return f"{color_code}{text}{Fore.RESET}"
 
+def print_banner():
+    banner = f"""
+{Fore.CYAN}╔═══════════════════════════════════════════════════════════════╗
+║                    🔄 Discord Status Rotator                  ║
+║                          by RELIHR                            ║
+╚═══════════════════════════════════════════════════════════════╝{Fore.RESET}
+"""
+    print(banner)
+
+def print_status_change(time_formatted, token_colored, status_colored, emoji_name, hypesquad, bio, current_status, status_count, total_statuses):
+    separator = f"{Fore.BLUE}{'─' * 65}{Fore.RESET}"
+    
+    print(separator)
+    print(f"{Fore.YELLOW}⏰ Time:{Fore.RESET} {time_formatted}")
+    print(f"{Fore.GREEN}👤 User:{Fore.RESET} {token_colored}")
+    print(f"{Fore.CYAN}💬 Status:{Fore.RESET} {status_colored}")
+    print(f"{Fore.MAGENTA}😀 Emoji:{Fore.RESET} {color_text(emoji_name, Fore.YELLOW)}")
+    print(f"{Fore.RED}🏆 HypeSquad:{Fore.RESET} {color_text(hypesquad, Fore.LIGHTBLUE_EX)}")
+    print(f"{Fore.LIGHTGREEN_EX}📝 Bio:{Fore.RESET} {color_text(bio[:30] + '...' if len(bio) > 30 else bio, Fore.WHITE)}")
+    print(f"{Fore.LIGHTRED_EX}🔮 Discord Status:{Fore.RESET} {color_text(str(current_status), Fore.LIGHTMAGENTA_EX)}")
+    print(f"{Fore.LIGHTYELLOW_EX}📊 Progress:{Fore.RESET} {color_text(f'{status_count % total_statuses + 1}/{total_statuses}', Fore.LIGHTCYAN_EX)}")
+    
+    progress = (status_count % total_statuses + 1) / total_statuses
+    bar_length = 20
+    filled_length = int(bar_length * progress)
+    bar = f"{Fore.GREEN}{'█' * filled_length}{Fore.LIGHTBLACK_EX}{'░' * (bar_length - filled_length)}{Fore.RESET}"
+    print(f"{Fore.LIGHTYELLOW_EX}📈 Progress Bar:{Fore.RESET} {bar} {progress*100:.1f}%")
+
+def print_rotation_message(time_formatted, rotation_type, value):
+    icons = {
+        "hypesquad": "🏆",
+        "bio": "📝",
+        "emoji": "😀"
+    }
+    
+    icon = icons.get(rotation_type, "🔄")
+    print(f"\n{Fore.LIGHTGREEN_EX}✨ {icon} {time_formatted} Rotating {rotation_type}: {color_text(value, Fore.YELLOW)}{Fore.RESET}")
+
+def print_error_message(error_type):
+    error_messages = {
+        "status": "❌ Error changing status",
+        "hypesquad": "❌ Error changing HypeSquad",
+        "bio": "❌ Error changing bio"
+    }
+    
+    message = error_messages.get(error_type, "❌ Unknown error")
+    print(f"{Fore.RED}{message}{Fore.RESET}")
+
+def print_startup_info(user_info, is_valid_token):
+    status_color = Fore.GREEN if is_valid_token else Fore.RED
+    status_text = "✅ Valid" if is_valid_token else "❌ Invalid"
+    
+    print(f"\n{Fore.LIGHTBLUE_EX}🚀 Starting Discord Status Rotator...{Fore.RESET}")
+    print(f"{Fore.YELLOW}👤 Connected user:{Fore.RESET} {color_text(user_info, Fore.CYAN)}")
+    print(f"{Fore.YELLOW}🔑 Token:{Fore.RESET} {status_color}{status_text}{Fore.RESET}")
+    print(f"{Fore.GREEN}{'─' * 50}{Fore.RESET}\n")
+
+def print_configuration_info(config, total_statuses, total_emojis):
+    print(f"{Fore.LIGHTBLUE_EX}⚙️  Current configuration:{Fore.RESET}")
+    print(f"{Fore.CYAN}   • Rotation speed:{Fore.RESET} {config['speed_rotator']} seconds")
+    print(f"{Fore.CYAN}   • Total statuses:{Fore.RESET} {total_statuses}")
+    print(f"{Fore.CYAN}   • Total emojis:{Fore.RESET} {total_emojis}")
+    print(f"{Fore.CYAN}   • Emoji mode:{Fore.RESET} {config.get('emoji_rotation_mode', 'with_text')}")
+    print(f"{Fore.CYAN}   • Console clear:{Fore.RESET} {'✅ Every ' + str(config.get('clear_interval', 15)) + ' updates' if config.get('clear_enabled', False) else '❌ Disabled'}")
+    print(f"{Fore.CYAN}   • HypeSquad rotation:{Fore.RESET} {'✅ Enabled' if config.get('rotate_hypesquad', False) else '❌ Disabled'}")
+    print(f"{Fore.CYAN}   • Bio rotation:{Fore.RESET} {'✅ Enabled' if config.get('rotate_aboutme', False) else '❌ Disabled'}")
+    print(f"{Fore.GREEN}{'─' * 50}{Fore.RESET}\n")
+
 def change_bio(token, bio_text):
     url = 'https://discord.com/api/v10/users/@me/profile'
     headers = {'Authorization': token, 'Content-Type': 'application/json'}
@@ -80,6 +148,7 @@ def main():
     speed_rotator = config["speed_rotator"]
     status_sequence = config["status_sequence"]
     use_status_sequence = config["use_status_sequence"]
+    emoji_rotation_mode = config.get("emoji_rotation_mode", "with_text")
     hypesquad_sequence = config.get("custom_hypesquad_sequence", config["hypesquad_sequence"])
     rotate_hypesquad = config.get("rotate_hypesquad", True)
     hypesquad_rotation_interval = config.get("hypesquad_rotation_interval", 60)
@@ -94,13 +163,19 @@ def main():
         statuses = read_file_lines("text.txt")
         emojis = read_emojis("emojis.txt")
     except Exception as e:
-        print(f"Error reading files: {e}")
+        print(f"{Fore.RED}❌ Error reading files: {e}{Fore.RESET}")
+        print(f"{Fore.YELLOW}💡 Make sure 'text.txt' and 'emojis.txt' files exist{Fore.RESET}")
         return
 
     user_info, is_valid_token = get_user_info(token)
     if not is_valid_token:
-        print("Invalid token. Exiting the program.")
+        print(f"{Fore.RED}❌ Invalid token. Exiting the program.{Fore.RESET}")
         return
+
+    clear_console()
+    print_banner()
+    print_startup_info(user_info, is_valid_token)
+    print_configuration_info(config, len(statuses), len(emojis))
 
     bio = aboutme_sequence[0] if rotate_aboutme and aboutme_sequence else "N/A"
 
@@ -122,34 +197,45 @@ def main():
             if rotate_hypesquad and current_time >= next_hypesquad_time:
                 hypesquad = hypesquad_sequence[hypesquad_count % len(hypesquad_sequence)]
                 house_id = config["hypesquad_mapping"].get(hypesquad.lower(), 0)
-                print(f"{time_formatted} Rotating HypeSquad to: {hypesquad}")
+                print_rotation_message(time_formatted, "hypesquad", hypesquad)
                 if not change_hypesquad(token, house_id):
-                    print("Error when changing HypeSquad.")
+                    print_error_message("hypesquad")
                 hypesquad_count += 1
                 next_hypesquad_time = current_time + hypesquad_rotation_interval
 
             if rotate_aboutme and current_time >= next_aboutme_time:
                 bio = aboutme_sequence[aboutme_count % len(aboutme_sequence)]
-                print(f"{time_formatted} Rotating Bio a: {bio}")
+                print_rotation_message(time_formatted, "bio", bio)
                 if not change_bio(token, bio):
-                    print("Error when changing bio.")
+                    print_error_message("bio")
                 aboutme_count += 1
                 next_aboutme_time = current_time + aboutme_rotation_interval
 
-            print(f"{time_formatted} Status changed to: {token_colored}. New status message: {status_colored}. | Emoji: ({emoji_name}) | HypeSquad badge: {hypesquad} | Bio: {bio} | Status: {current_status}")
+            print_status_change(time_formatted, token_colored, status_colored, emoji_name, hypesquad, bio, current_status, status_count, len(statuses))
+            
             if not change_status(token, status, emoji_name, emoji_id, current_status):
-                print("Error when changing the status.")
+                print_error_message("status")
 
             status_count += 1
-            emoji_count += 1
-            time.sleep(speed_rotator)
+            
+            if emoji_rotation_mode == "with_text":
+                emoji_count += 1
+            elif emoji_rotation_mode == "after_text_cycle" and status_count % len(statuses) == 0:
+                emoji_count += 1
+                print_rotation_message(time_formatted, "emoji", f"Cycle completed - New emoji: {emojis[emoji_count % len(emojis)]['name']}")
+            
             if clear_enabled and status_count % clear_interval == 0:
+                time.sleep(speed_rotator)
                 clear_console()
+                print_banner()
+            else:
+                time.sleep(speed_rotator)
         except KeyboardInterrupt:
-            print("Program stopped by the user.")
+            print(f"\n{Fore.YELLOW}⚠️  Program stopped by user.{Fore.RESET}")
+            print(f"{Fore.CYAN}👋 Thanks for using Discord Status Rotator!{Fore.RESET}")
             break
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"{Fore.RED}❌ An error occurred: {e}{Fore.RESET}")
             time.sleep(speed_rotator)
 
 if __name__ == "__main__":
