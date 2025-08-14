@@ -6,6 +6,8 @@
 
   <p align="center">
     This script allows you to change the status of your Discord account automatically from the statuses defined in a text file and extras.
+
+    Warning: Using scripts to automate or “self-bot” a personal Discord account violates Discord’s Terms of Service (ToS). This can lead to your account being suspended or permanently banned by Discord, and many server owners will also ban accounts that show automatically rotating statuses or other automated behavior. If you need automation, create a proper bot account via the Discord Developer Portal and follow the official API rules.
   </p>
 </div>
 
