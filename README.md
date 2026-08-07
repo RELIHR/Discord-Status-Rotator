@@ -49,7 +49,7 @@ python main.py
 
 Use the code with caution. ⚠️
 
-- `text.txt` file containing the states you want to set in Discord, one per line.
+- `text.txt` file containing the statuses you want to set in Discord, one per line.
 - `emojis.txt` file if you want to add rotating emojis, including nitro emojis.
 - `aboutme.txt` In this file you can rotate your “About me” in each line a new text is rotated (Test).
 
@@ -66,7 +66,7 @@ Format without nitro (only the emoji): `😀`
 - **use_status_sequence**: Enable or disable the status sequence rotation.
 - **clear_enabled**: Enables or disables automatic console clearing.
 - **clear_interval**: Number of status updates after which the console will be automatically cleared (e.g., 15 means clear console every 15 status changes).
-- **speed_rotator**: Time interval between each state change (in seconds).
+- **speed_rotator**: Time interval between each status change (in seconds).
 - **emoji_rotation_mode**: Controls when emojis change. Options are:
   - `"with_text"`: Emojis change with each text change (default behavior).
   - `"after_text_cycle"`: Emojis only change after all texts have been displayed once.
